@@ -1,0 +1,34 @@
+name: Build and test Sync-Trees
+
+on:
+  push:
+    branches:
+      - sync-trees
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Sync-Trees
+
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v4
+      
+    - name: Setup gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: Make ./gradlew executable
+      run: chmod +x ./gradlew
+      
+    - name: Build
+      run: ./gradlew build
+
+    - name: Test
+      run: ./gradlew test
