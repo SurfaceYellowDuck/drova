@@ -12,20 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./Sync-Trees
+        working-directory: ./untitled
 
     steps:
     - name: Checkout project sources
       uses: actions/checkout@v4
       
     - name: Setup gradle
-      uses: /untitledgradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2
 
     - name: Make ./gradlew executable
-      run: chmod +x ./untitled/gradlew
+      run: chmod +x ./gradlew
       
     - name: Build
-      run: ./untitled/gradlew build
+      run: ./gradlew build
 
     - name: Test
-      run: ./untitled/gradlew test
+      run: ./gradlew test
