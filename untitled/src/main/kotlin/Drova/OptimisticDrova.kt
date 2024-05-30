@@ -64,7 +64,7 @@ class OptimisticDrova <K : Comparable<K>, V> : AbstractDrova<K, V, OptimisticNod
             childNode.lock()
             if (root?.key == childNode.key) {
                 try {
-                    childNode.also { root = it.remove(it, key) }
+                    root = childNode.remove(childNode, key)
                     childNode.unlock()
                 } catch (_: IllegalThreadStateException) {
                     childNode.unlock()
@@ -81,9 +81,9 @@ class OptimisticDrova <K : Comparable<K>, V> : AbstractDrova<K, V, OptimisticNod
             if (verify) {
                 try {
                     if (parentNode.key < key)
-                        childNode.also { parentNode.right = it.remove(it, key) }
+                        parentNode.right = childNode.remove(childNode, key)
                     else
-                        childNode.also { parentNode.left = it.remove(it, key) }
+                        parentNode.left = childNode.remove(childNode, key)
                     childNode.unlock(); parentNode.unlock()
                 } catch (_: IllegalThreadStateException) {
                     childNode.unlock(); parentNode.unlock()
