@@ -1,6 +1,5 @@
 
 import kotlinx.coroutines.sync.Mutex
-import AbstractNode
 
 class OptimisticNode<K : Comparable<K>, V>(
     key: K,
@@ -64,7 +63,7 @@ class OptimisticNode<K : Comparable<K>, V>(
 
         while (childNode?.left != null) {
             parentNode = childNode
-            childNode.let { childNode = it.left ?: throw IllegalThreadStateException() }
+             childNode = childNode.left ?: throw IllegalThreadStateException()
         }
 
         parentNode.lock(); childNode?.lock()
@@ -78,14 +77,14 @@ class OptimisticNode<K : Comparable<K>, V>(
                 node.right = null
             parentNode.unlock()
             return res
-        } else if (childNode != null && validate(parentNode) && parentNode.left == childNode && childNode?.left == null) {
-            val res = Pair(childNode!!.key, childNode!!.value)
-            if (childNode!!.right != null) {
-                parentNode.left = childNode!!.right
+        } else if (childNode != null && validate(parentNode) && parentNode.left == childNode && childNode.left == null) {
+            val res = Pair(childNode.key, childNode.value)
+            if (childNode.right != null) {
+                parentNode.left = childNode.right
             } else {
                 parentNode.left = null
             }
-            childNode!!.unlock(); parentNode.unlock()
+            childNode.unlock(); parentNode.unlock()
             return res
         } else {
             childNode?.unlock(); parentNode.unlock()
